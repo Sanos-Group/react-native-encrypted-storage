@@ -41,7 +41,8 @@ RCT_EXPORT_METHOD(setItem:(NSString *)key withValue:(NSString *)value resolver:(
     NSDictionary* storeQuery = @{
         (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
         (__bridge id)kSecAttrAccount : key,
-        (__bridge id)kSecValueData : dataFromValue
+        (__bridge id)kSecValueData : dataFromValue,
+        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAfterFirstUnlock
     };
     
     // Deletes the existing item prior to inserting the new one
@@ -65,7 +66,8 @@ RCT_EXPORT_METHOD(getItem:(NSString *)key resolver:(RCTPromiseResolveBlock)resol
         (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
         (__bridge id)kSecAttrAccount : key,
         (__bridge id)kSecReturnData : (__bridge id)kCFBooleanTrue,
-        (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne
+        (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne,
+        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAfterFirstUnlock
     };
     
     CFTypeRef dataRef = NULL;
@@ -91,7 +93,8 @@ RCT_EXPORT_METHOD(removeItem:(NSString *)key resolver:(RCTPromiseResolveBlock)re
     NSDictionary* removeQuery = @{
         (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
         (__bridge id)kSecAttrAccount : key,
-        (__bridge id)kSecReturnData : (__bridge id)kCFBooleanTrue
+        (__bridge id)kSecReturnData : (__bridge id)kCFBooleanTrue,
+        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAfterFirstUnlock
     };
     
     OSStatus removeStatus = SecItemDelete((__bridge CFDictionaryRef)removeQuery);
